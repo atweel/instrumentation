@@ -17,7 +17,7 @@ jobs:
 
     env:
       CI: true
-      NPM_AUTH_TOKEN: ${{ secrets.NPMJS_ORG_READER_TOKEN }}
+      NPM_AUTH_TOKEN: ${{ secrets.NPMJS_ORG_PUBLISHER_TOKEN }}
 
     steps:
       - uses: actions/checkout@v2
