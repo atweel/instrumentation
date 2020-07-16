@@ -6,13 +6,13 @@ import { AsyncInstrumentable } from '~/internals/AsyncInstrumentable';
 
 export type InstrumentationFunction<O extends object = object, P extends any[] = any[], C = any> = (configuration: C, ...parameters: P) => Promise<O> | O;
 
-export type InstrumentationLike<I, O extends object = object, P extends any[] = any[], C = null> = {
+export type InstrumentationLike<I, O extends object = object, P extends any[] = any[], C = any> = {
     [K in keyof I]: I[K] extends (context: C, ...parameters: P) => O ? I[K] : never;
 }
 export interface InstrumentationDictionary {
     [key: string]: InstrumentationFunction | undefined;
 }
-export type AsyncInstrumentationLike<I, O extends object = object, P extends any[] = any[], C = null> = {
+export type AsyncInstrumentationLike<I, O extends object = object, P extends any[] = any[], C = any> = {
     [K in keyof I]: I[K] extends ((context: C, ...parameters: P) => Promise<O> | O) ? I[K] : never;
 };
 
