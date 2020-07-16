@@ -1,12 +1,18 @@
 import { Annotations, Callable, CallableExecutionMode } from '@atweel/primitives';
 
+import { 
+    InstrumentationLike, 
+    AsyncInstrumentationLike, 
+    InstrumentationFactory, 
+    AsyncInstrumentationFactory, 
+    InstrumentationHook,
+} from '~/types';
+
 import { Instrumentable } from '~/internals/Instrumentable';
 import { InstrumentationSyntax } from '~/internals/InstrumentationSyntax';
 import { InstrumentationFlow } from '~/internals/InstrumentationFlow';
-import { InstrumentationLike, AsyncInstrumentationLike, InstrumentationFactory, AsyncInstrumentationFactory } from '~/types';
 import { AsyncInstrumentable } from '~/internals/AsyncInstrumentable';
 import { AsyncInstrumentationSyntax } from '~/internals/AsyncInstrumentationSyntax';
-import { InstrumentationHook } from '~/types';
 import { AsyncInstrumentationFlow } from '~/internals/AsyncInstrumentationFlow';
 
 function isInstrumentable(instance: any): instance is Instrumentable<any> {
