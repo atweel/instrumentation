@@ -1,0 +1,9 @@
+{
+    "exclude": [
+        "**/*"
+    ],
+    "references": [
+        { "path": "package" },
+        { "path": "test" }
+    ]
+}
