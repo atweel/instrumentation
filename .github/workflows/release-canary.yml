@@ -60,7 +60,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=\${NPM_AUTH_TOKEN}" > .npmrc && \
           yarn install --frozen-lockfile && \
           yarn lerna bootstrap -- -- --frozen-lockfile && \
-          yarn release:canary
+          yarn release:canary --yes
 
       # - name: Push version update and tag
       #   if: github.event_name == 'push'
