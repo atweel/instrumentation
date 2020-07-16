@@ -30,15 +30,6 @@ jobs:
           git config --global user.email "robby@atweel.com" && \
           git config --global user.name "Robby Atweel"
 
-      # - name: Increment prerelease version if no version tag assigned
-      #   if: github.event_name == 'push'
-      #   run: |
-      #     git fetch --tags --quiet
-      #     if [[ $(git tag --points-at HEAD) !=  "v"* ]]; 
-      #       then yarn version --prerelease --preid alpha --no-commit-hooks 
-      #     fi
-      #   working-directory: package
-
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -62,8 +53,3 @@ jobs:
           yarn install --frozen-lockfile && \
           yarn lerna bootstrap -- -- --frozen-lockfile && \
           yarn release:canary --yes
-
-      # - name: Push version update and tag
-      #   if: github.event_name == 'push'
-      #   run: git push --tags && git push
-
