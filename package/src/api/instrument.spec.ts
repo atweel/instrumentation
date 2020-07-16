@@ -2,12 +2,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import 'jest';
 
-import { Instrumentable } from '~/internals/Instrumentable';
-import { InstrumentationConfiguration, SyncInstrumentationHook, AsyncInstrumentationHook } from '~/types';
-import { InstrumentationHook } from '~/types';
-import instrumented from './instrumented';
-import { AsyncInstrumentable } from '~/internals/AsyncInstrumentable';
 import { mapValues } from 'lodash';
+
+import { 
+    InstrumentationConfiguration, 
+    SyncInstrumentationHook, 
+    AsyncInstrumentationHook, 
+    InstrumentationHook, 
+} from '~/types';
+
+import { Instrumentable } from '~/internals/Instrumentable';
+import { AsyncInstrumentable } from '~/internals/AsyncInstrumentable';
+
+import instrument from './instrument';
 
 class SampleInstrumentation {
     
@@ -65,13 +72,11 @@ SampleInstrumentation.prototype.instrument2 = function (context: null, parameter
     };
 };
 
-const sampleInstrumentationFactory = (): SampleInstrumentation => new SampleInstrumentation();
-
-describe('instrumented', () => {
+describe('instrument', () => {
     it('yields output that is a combination of outputs of individual instruments for a synchronous instrumentable', () => {
         const instrumentable = new SampleInstrumentable();
 
-        const result = instrumented(instrumentable, sampleInstrumentationFactory)
+        const result = instrument(instrumentable, SampleInstrumentation)
             .with('instrument1', 20)
             .with('instrument2', '10')
             .complete();
@@ -83,7 +88,7 @@ describe('instrumented', () => {
     it('yields output that is a combination of outputs of individual instruments for an asynchronous instrumentable and a synchronous instrumentation', async () => {
         const instrumentable = new SampleAsyncInstrumentable();
 
-        return instrumented(instrumentable, sampleInstrumentationFactory)
+        return instrument(instrumentable, SampleInstrumentation)
             .with('instrument1', 20)
             .with('instrument2', '10')
             .ready()

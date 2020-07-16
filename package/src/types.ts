@@ -21,9 +21,7 @@ export type InstrumentationHookAsyncHandler<I extends AsyncInstrumentationLike<I
 export type InstrumentationConfiguration<I extends InstrumentationLike<I, any> | AsyncInstrumentationLike<I, any>> = Partial<Record<keyof I, any[]>>;
 export type InstrumentationOf<T> = T extends Instrumentable<infer I> | AsyncInstrumentable<infer I> ? I : never;
 export type InstrumentationConstructor<I> = Constructor<InstrumentationLike<I>>;
-export type InstrumentationFactory<I> = () => InstrumentationLike<I>;
 export type AsyncInstrumentationConstructor<I> = Constructor<AsyncInstrumentationLike<I>>;
-export type AsyncInstrumentationFactory<I> = () => AsyncInstrumentationLike<I>;
 
 export type InstrumentationParametersOf<I extends InstrumentationLike<I> | AsyncInstrumentationLike<I>, K extends keyof I> = 
     I[K] extends (configuration: any, ...parameters: infer P) => any ? P : never;

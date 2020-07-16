@@ -3,8 +3,8 @@ import { Annotations, Callable, CallableExecutionMode } from '@atweel/primitives
 import { 
     InstrumentationLike, 
     AsyncInstrumentationLike, 
-    InstrumentationFactory, 
-    AsyncInstrumentationFactory, 
+    InstrumentationConstructor, 
+    AsyncInstrumentationConstructor, 
     InstrumentationHook,
 } from '~/types';
 
@@ -23,18 +23,18 @@ function isAsyncInstrumentable(instance: any): instance is Instrumentable<any> {
     return instance?.[InstrumentationHook]?.[Annotations]?.[Callable.ExecutionMode] === CallableExecutionMode.Asynchronous;
 }
 
-function instrumented<I extends InstrumentationLike<I>> (target: Instrumentable<I>, instrumentationFactory: InstrumentationFactory<I>): InstrumentationSyntax<I>;
-function instrumented<I extends AsyncInstrumentationLike<I>> (target: AsyncInstrumentable<I>, instrumentationFactory: AsyncInstrumentationFactory<I>): AsyncInstrumentationSyntax<I>;
-function instrumented(target: Instrumentable<any> | AsyncInstrumentable<any>, instrumentationFactory: any): any {
+function instrument<I extends InstrumentationLike<I>> (target: Instrumentable<I>, instrumentationConstructor: InstrumentationConstructor<I>): InstrumentationSyntax<I>;
+function instrument<I extends AsyncInstrumentationLike<I>> (target: AsyncInstrumentable<I>, instrumentationConstructor: AsyncInstrumentationConstructor<I>): AsyncInstrumentationSyntax<I>;
+function instrument(target: Instrumentable<any> | AsyncInstrumentable<any>, instrumentationConstructor: any): any {
     if (isInstrumentable(target)) {
-        return new InstrumentationFlow<any>(target, instrumentationFactory());
+        return new InstrumentationFlow<any>(target, new instrumentationConstructor());
     } else {
         if (isAsyncInstrumentable(target)) {
-            return new AsyncInstrumentationFlow<any>(target, instrumentationFactory());
+            return new AsyncInstrumentationFlow<any>(target, new instrumentationConstructor());
         } else {
             throw new Error(`The target is neither Instrumentable nor AsyncInstrumentable.`);
         }
     }
 }
 
-export default instrumented;
+export default instrument;
