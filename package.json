@@ -16,8 +16,7 @@
     "develop:showcase": "concurrently 'yarn watch:packages' 'yarn watch:showcase'",
     "integrate": "yarn rebuild && yarn test",
     "prepublishOnly": "yarn rebuild && yarn lint && yarn test",
-    "release:canary": "lerna publish --canary prerelease --preid rc",
-    "release:stable": "lerna publish from-package"
+    "release:canary": "lerna publish --canary premajor --preid rc --pre-dist-tag rc"
   },
   "workspaces": [
     "package",

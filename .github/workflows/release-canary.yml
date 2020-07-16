@@ -1,0 +1,68 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Integrate master branch
+
+on:
+  push:
+    branches: [master]
+    paths-ignore: 
+      - "**/package.json"
+
+jobs:
+  integrate:
+    name: Integration
+    
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+      NPM_AUTH_TOKEN: ${{ secrets.NPMJS_ORG_READER_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.ROBBY_ATWEELS_GITHUB_TOKEN }}
+
+      - name: Configure git user name & email
+        run: |
+          git config --global user.email "robby@atweel.com" && \
+          git config --global user.name "Robby Atweel"
+
+      # - name: Increment prerelease version if no version tag assigned
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     git fetch --tags --quiet
+      #     if [[ $(git tag --points-at HEAD) !=  "v"* ]]; 
+      #       then yarn version --prerelease --preid alpha --no-commit-hooks 
+      #     fi
+      #   working-directory: package
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Resolve yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Save/restore yarn cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Release package(s)
+        run: |
+          echo "//registry.npmjs.org/:_authToken=\${NPM_AUTH_TOKEN}" > .npmrc && \
+          yarn install --frozen-lockfile && \
+          lerna bootstrap -- --frozen-lockfile && \
+          yarn release:canary
+
+      # - name: Push version update and tag
+      #   if: github.event_name == 'push'
+      #   run: git push --tags && git push
+
