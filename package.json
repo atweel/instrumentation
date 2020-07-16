@@ -13,7 +13,11 @@
     "build:test": "ttsc --build test",
     "watch:package": "ttsc --build --watch --preserveWatchOutput package",
     "watch:showcase": "ts-node-dev --respawn --debounce 500 showcase/src/entrypoint.ts",
-    "develop:showcase": "concurrently 'yarn watch:packages' 'yarn watch:showcase'"
+    "develop:showcase": "concurrently 'yarn watch:packages' 'yarn watch:showcase'",
+    "integrate": "yarn rebuild && yarn test",
+    "prepublishOnly": "yarn rebuild && yarn lint && yarn test",
+    "release:canary": "lerna publish from-package --canary",
+    "release:stable": "lerna publish from-package"
   },
   "workspaces": [
     "package",
